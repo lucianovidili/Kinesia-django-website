@@ -1,0 +1,111 @@
+{% load static %}
+<!-- Navbar -->
+<!--<nav class="main-header navbar navbar-expand-md navbar-light navbar-white" style="background-color: #ffa600">-->
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <div class="container">
+        <a href="#" class="navbar-brand">
+            <img src="{% static 'img/logo.png' %}" alt="Kinesia"
+                 class="brand-image"
+                 style="opacity: .9">
+            <span class="brand-text font-weight-light">Kinesia</span>
+        </a>
+        <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                       class="nav-link dropdown-toggle"><i class="fas fa-folder-open"></i> Mantenimientos</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="#" class="dropdown-item"><i class="fas fa-truck-loading"></i> Categorías</a></li>
+                        <li><a href="#" class="dropdown-item"><i class="fas fa-boxes"></i> Productos</a></li>
+                        <li><a href="#" class="dropdown-item"><i class="fas fa-users"></i> Clientes</a></li>
+                        <li><a href="#" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">Cumpleaños
+                    <i class="fas fa-birthday-cake"></i>
+                    <span class="badge badge-warning navbar-badge"><strong>3</strong></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span style="background-color: #ffa600; color: white" class="dropdown-header"><strong>¡CUMPLEN AÑOS HOY!</strong></span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-birthday-cake"></i> Luciano Mario Vidili
+                        <span class="float-right text-muted text-sm">41 años</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-birthday-cake"></i> Ingrid Fabiola Peralta Tejerina
+                        <span class="float-right text-muted text-sm">38 años</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-birthday-cake"></i> Susana Beatriz Centanni de Vidili
+                        <span class="float-right text-muted text-sm">64 años</span>
+                    </a>
+                    {% comment %}<div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    {% endcomment %}
+                </div>
+            </li>
+        </ul>
+        {% comment %}
+        <button class="order-1 order-md-3 btn btn-danger swalDefaultInfo">Cumpleaños <i class="fas fa-birthday-cake"></i></button>
+        {% endcomment %}
+    </div>
+
+</nav>
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '{% url 'erp:birthdays_get_list_ajax' %}',
+                type: 'GET',
+                data: {},
+                dataType: 'json'
+            }).done(function (data) {
+                //alert('EXITO!!!');
+                if (!data.hasOwnProperty('error')) {
+                    Swal.fire({
+                        title: '¡EXITO, no tiene el atributo error!',
+                        text: ' TOTAL',
+                        icon: 'success',
+                        showCancelButton: false,
+                        //confirmButtonColor: '#308false',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        //REFRESHES THE PAGE
+                        //location.href = window.location.pathname;
+                        //location.href = '{{ list_url }}';
+                        //$('#data_table').DataTable().ajax.reload();
+                    })
+                    return false;
+                } else {
+                    //message_error(data.error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Tiene el atributo error',
+                        icon: 'error',
+                    });
+                    //alert(data['error']);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+            });
+        })
+        ;
+    </script>
+{% endblock %}
