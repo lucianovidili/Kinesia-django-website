@@ -1,1 +1,1 @@
-# Kinesia-website
+# Kinesia-django-website
